@@ -1,4 +1,5 @@
-html lang="es" data-frame-refused-watch="" __gcrremoteframetoken="928f3f0cdd866a649120a85f633cc021" data-theme="light" style="color-scheme: light;"><head>
+<!DOCTYPE html>
+<html lang="es"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="ATH Bienes Raíces: departamentos, casas, terrenos y cabañas en Córdoba y las sierras. Tasación gratuita. Escribinos por WhatsApp.">
@@ -63,7 +64,7 @@ nav a.mini{font-size:.9rem;padding:8px 16px;border-radius:99px;border:1px solid 
 .filters button[aria-pressed="true"]{background:var(--grad);border-color:transparent;color:#fff;font-weight:700}
 .prop{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
 .prop .ph{aspect-ratio:4/3;background:linear-gradient(135deg,var(--navy),#0d2a2a);display:grid;place-items:center;color:var(--teal);font-weight:700}
-.prop .ph img{width:100%;height:100%;object-fit:cover;display:block}
+.prop .ph img{width:100%;height:100%;object-fit:contain;display:block;background:#000;cursor:zoom-in}
 .prop .in{padding:20px;display:flex;flex-direction:column;gap:6px;flex:1}
 .prop .tag{font-size:.82rem;color:var(--teal);font-weight:700}
 .prop h3{font-size:1.1rem}
@@ -82,6 +83,21 @@ nav a.mini{font-size:.9rem;padding:8px 16px;border-radius:99px;border:1px solid 
 .flinks{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-top:16px;font-size:.92rem}
 .flinks a{color:var(--muted)}.flinks a:hover{color:var(--teal)}
 @media(max-width:800px){.menu{display:none}.btn.ghost{margin:12px 0 0}}
+
+
+/* Carrusel de fotos */
+.prop .ph{position:relative;background:#000}
+.ph .pv,.ph .nx{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:1.4rem;line-height:1;cursor:pointer}
+.ph .pv{left:10px}.ph .nx{right:10px}
+.ph .ct{position:absolute;right:10px;bottom:10px;background:rgba(0,0,0,.65);color:#fff;font-size:.8rem;padding:3px 10px;border-radius:99px}
+
+
+/* Visor de fotos */
+#lb{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center}
+#lb[hidden]{display:none}
+#lb img{max-width:92vw;max-height:88vh;object-fit:contain}
+#lb button{position:absolute;background:rgba(255,255,255,.12);color:#fff;border:0;border-radius:50%;width:44px;height:44px;font-size:1.6rem;cursor:pointer}
+#lb .lbp{left:12px}#lb .lbn{right:12px}#lb .lbx{top:calc(14px + env(safe-area-inset-top,0px));right:14px}
 
 /* Panel admin */
 #adm{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.88);overflow:auto;padding:24px 16px}
@@ -279,6 +295,8 @@ footer p{color:var(--muted);font-size:.9rem}
   <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm5.2 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .6l-.4.6c-.2.2-.3.4-.1.7.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.7-.1l.9-1.1c.2-.3.4-.2.7-.1l1.9.9c.3.1.5.2.5.4.1.2.1.8-.1 1.4z"></path></svg>
 </a>
 
+<div id="lb" hidden role="dialog" aria-label="Fotos"><button class="lbx" aria-label="Cerrar">×</button><button class="lbp" aria-label="Anterior">‹</button><img id="lbi" alt=""><button class="lbn" aria-label="Siguiente">›</button></div>
+
 <div id="adm" role="dialog" aria-label="Panel de administración" hidden="">
   <div class="adm-box">
     <button class="adm-x" id="adm-close" type="button">Cerrar</button>
@@ -289,30 +307,30 @@ footer p{color:var(--muted);font-size:.9rem}
     <div id="adm-panel" hidden="">
       <h3>Propiedades cargadas</h3>
       <div id="adm-list"></div>
-      <h3 style="margin-top:26px" id="adm-tit">Editar propiedad</h3>
+      <h3 style="margin-top:26px" id="adm-tit">Agregar propiedad</h3>
       <form id="f-prop" __gcruniqueid="8">
         <label>Tipo<select name="tipo" __gcruniqueid="9"><option>Departamento</option><option>Casa</option><option>Cabaña</option><option>Terreno</option></select></label>
         <label>Título<input name="titulo" required="" __gcruniqueid="10"></label>
         <label>Zona<input name="zona" required="" __gcruniqueid="11"></label>
         <label>Detalle (ambientes, m², etc.)<input name="detalle" __gcruniqueid="12"></label>
         <label>Precio<input name="precio" placeholder="USD 85.000 o Consultar" __gcruniqueid="13"></label>
-        <label>Foto<input type="file" name="foto" accept="image/*"></label>
-        <button class="btn" type="submit" id="adm-add">Guardar edición</button>
+        <label>Fotos (mínimo 5, máximo 10)<input type="file" name="foto" accept="image/*" multiple=""></label>
+        <button class="btn" type="submit" id="adm-add">Agregar a la lista</button>
       </form>
       <button class="btn" type="button" id="adm-save" style="margin-top:18px;width:100%">Guardar y publicar cambios</button>
       <p id="adm-msg"></p>
     </div>
   </div>
 </div>
-<script id="data" type="application/json">[{"tipo":"Departamento","titulo":"Departamento en Córdoba capital","zona":"Córdoba capital","detalle":"Completar ambientes y m²","precio":"Consultar","foto":""},{"tipo":"Casa","titulo":"Casa en Córdoba","zona":"Córdoba","detalle":"Completar dormitorios y m²","precio":"Consultar","foto":""},{"tipo":"Cabaña","titulo":"Cabaña alpina en las sierras","zona":"Sierras de Córdoba","detalle":"Ideal vivir o alquilar","precio":"Consultar","foto":""},{"tipo":"Terreno","titulo":"Terreno en las sierras","zona":"Sierras de Córdoba","detalle":"Completar superficie","precio":"Consultar","foto":""}]</script>
+<script id="data" type="application/json">[{"tipo": "Departamento", "titulo": "Departamento en Córdoba capital", "zona": "Córdoba capital", "detalle": "Completar ambientes y m²", "precio": "Consultar", "fotos": []}, {"tipo": "Casa", "titulo": "Casa en  Venta 2 dormitorios Barrio Norte Villa Allende", "zona": "Barrio Norte Villa Allende", "detalle": "2 dormitorios 2 baños 107 m2 cubiertos cochera semi cubierta. Total  180 m2 súper.", "precio": "117.000 usd", "fotos": []}, {"tipo": "Cabaña", "titulo": "Construcción de Cabañas  Alpinas", "zona": "Sierras de Córdoba", "detalle": "Ideal vivir o alquilar 47 m2  estandar y modelo premium 2 dormitorios y 2 baños 2  uno en suite, sauna seco opcional", "precio": "19.500 usd", "fotos": []}, {"tipo": "Terreno", "titulo": "Terreno en las sierras", "zona": "Sierras de Córdoba", "detalle": "Completar superficie", "precio": "Consultar", "fotos": []}]</script>
 <script>
-let PROPIEDADES=JSON.parse(document.getElementById('data').textContent);
+let PROPIEDADES=JSON.parse(document.getElementById('data').textContent).map(p=>({...p,fotos:p.fotos||(p.foto?[p.foto]:[])}));
 const WA='https://wa.me/543516420785?text=';
 const lista=document.getElementById('lista'), filters=document.getElementById('filters');
 function pintar(f){
-  lista.innerHTML=PROPIEDADES.filter(p=>f==='Todas'||p.tipo===f).map(p=>`
+  lista.innerHTML=PROPIEDADES.map((p,n)=>({p,n})).filter(({p})=>f==='Todas'||p.tipo===f).map(({p,n})=>`
     <article class="prop">
-      <div class="ph">${p.foto?`<img src="${p.foto}" alt="${p.titulo}" loading="lazy">`:p.tipo}</div>
+      <div class="ph" data-n="${n}" data-i="0">${p.fotos.length?`<img src="${p.fotos[0]}" alt="${p.titulo}" loading="lazy">${p.fotos.length>1?`<button class="pv" aria-label="Foto anterior">‹</button><button class="nx" aria-label="Foto siguiente">›</button><span class="ct">1/${p.fotos.length}</span>`:''}`:p.tipo}</div>
       <div class="in">
         <span class="tag">${p.tipo}</span>
         <h3>${p.titulo}</h3>
@@ -323,6 +341,20 @@ function pintar(f){
       </div>
     </article>`).join('');
 }
+/* Visor: tocá una foto para verla completa */
+let lbN=0,lbI=0;const lb=document.getElementById('lb');
+const lbShow=()=>document.getElementById('lbi').src=PROPIEDADES[lbN].fotos[lbI];
+lista.addEventListener('click',e=>{const im=e.target.closest('.ph img');if(!im)return;const ph=im.parentNode;lbN=+ph.dataset.n;lbI=+ph.dataset.i;lbShow();lb.hidden=false});
+lb.addEventListener('click',e=>{const L=PROPIEDADES[lbN].fotos.length;
+  if(e.target.closest('.lbp')){lbI=(lbI+L-1)%L;lbShow()}
+  else if(e.target.closest('.lbn')){lbI=(lbI+1)%L;lbShow()}
+  else if(e.target.id!=='lbi')lb.hidden=true});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')lb.hidden=true});
+/* Pasar fotos de cada propiedad */
+lista.addEventListener('click',e=>{const b=e.target.closest('.pv,.nx');if(!b)return;
+  const ph=b.parentNode,p=PROPIEDADES[+ph.dataset.n],L=p.fotos.length;
+  const i=(+ph.dataset.i+(b.classList.contains('nx')?1:L-1))%L;
+  ph.dataset.i=i;ph.querySelector('img').src=p.fotos[i];ph.querySelector('.ct').textContent=(i+1)+'/'+L});
 ['Todas',...new Set(PROPIEDADES.map(p=>p.tipo))].forEach((t,i)=>{
   const b=document.createElement('button');b.textContent=t;b.setAttribute('aria-pressed',i===0);
   b.onclick=()=>{filters.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));pintar(t)};
@@ -349,9 +381,9 @@ const HASH="c257b0dd62e576d65051ba91d58c3a7c4f45f42e04c75f3055cf401ddddde791"; /
 const $=id=>document.getElementById(id); let ed=-1, fotoTmp=null;
 const msg=t=>$('adm-msg').textContent=t;
 const sha=async t=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t)))].map(x=>x.toString(16).padStart(2,'0')).join('');
-const redim=f=>new Promise(r=>{const i=new Image();i.onload=()=>{const k=Math.min(1,900/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;c.getContext('2d').drawImage(i,0,0,c.width,c.height);r(c.toDataURL('image/jpeg',.72))};i.src=URL.createObjectURL(f)});
+const redim=f=>new Promise(r=>{const i=new Image();i.onload=()=>{const k=Math.min(1,800/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;c.getContext('2d').drawImage(i,0,0,c.width,c.height);r(c.toDataURL('image/jpeg',.68))};i.src=URL.createObjectURL(f)});
 function listar(){
-  $('adm-list').innerHTML=PROPIEDADES.map((p,n)=>`<div class="adm-row"><span>${p.tipo} · ${p.titulo}</span><span><button data-e="${n}">Editar</button> <button data-d="${n}">Quitar</button></span></div>`).join('')||'<p>No hay propiedades.</p>';
+  $('adm-list').innerHTML=PROPIEDADES.map((p,n)=>`<div class="adm-row"><span>${p.tipo} · ${p.titulo} (${p.fotos.length} fotos)</span><span><button data-e="${n}">Editar</button> <button data-d="${n}">Quitar</button></span></div>`).join('')||'<p>No hay propiedades.</p>';
 }
 $('adm-open').onclick=()=>$('adm').hidden=false;
 $('adm-close').onclick=()=>$('adm').hidden=true;
@@ -363,8 +395,10 @@ $('adm-list').onclick=e=>{const d=e.target.dataset;
 $('f-prop').onsubmit=async e=>{e.preventDefault();const f=e.target,p={};
   ['tipo','titulo','zona','detalle','precio'].forEach(k=>p[k]=f[k].value.trim());
   p.precio=p.precio||'Consultar';
-  const file=f.foto.files[0];
-  p.foto=file?await redim(file):(ed>=0?PROPIEDADES[ed].foto:'');
+  const files=[...f.foto.files];
+  if((ed<0||files.length)&&(files.length<5||files.length>10)){msg('Elegí entre 5 y 10 fotos (elegiste '+files.length+').');return}
+  msg('Procesando fotos…');
+  p.fotos=files.length?await Promise.all(files.map(redim)):PROPIEDADES[ed].fotos;
   if(ed>=0)PROPIEDADES[ed]=p;else PROPIEDADES.push(p);
   ed=-1;f.reset();$('adm-tit').textContent='Agregar propiedad';$('adm-add').textContent='Agregar a la lista';
   listar();pintar('Todas');msg('Lista actualizada. Falta publicar los cambios.')};
@@ -372,8 +406,9 @@ $('adm-save').onclick=async()=>{
   const art=await (window.claude&&claude.use('artifact'));
   if(!art){msg('Este panel solo publica desde la cuenta dueña de la página.');return}
   const c=document.documentElement.cloneNode(true);
+  [...c.attributes].forEach(a=>{if(a.name!=='lang')c.removeAttribute(a.name)}); /* saca atributos que agrega el navegador */
   c.querySelector('#lista').innerHTML='';c.querySelector('#filters').innerHTML='';
-  c.querySelector('#adm').setAttribute('hidden','');
+  c.querySelector('#adm').setAttribute('hidden','');c.querySelector('#lb').setAttribute('hidden','');c.querySelector('#lbi').removeAttribute('src');
   c.querySelector('#adm-list').innerHTML='';c.querySelector('#adm-msg').textContent='';
   c.querySelector('#adm-panel').setAttribute('hidden','');c.querySelector('#adm-login').removeAttribute('hidden');
   c.querySelectorAll('.rv.on').forEach(x=>x.classList.remove('on'));
